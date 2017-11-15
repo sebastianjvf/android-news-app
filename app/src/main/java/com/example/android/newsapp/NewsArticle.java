@@ -2,9 +2,9 @@ package com.example.android.newsapp;
 
 public class NewsArticle {
 
-    String title;
-    String date;
-    String url;
+    private String title;
+    private String date;
+    private String url;
 
     public NewsArticle(String title, String date, String url) {
         this.title = title;

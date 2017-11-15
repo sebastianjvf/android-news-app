@@ -25,5 +25,8 @@ public class MainActivity extends AppCompatActivity {
         // Extract items from the sample JSON
         newsArticleList = QueryUtils.extractNewsArticles(TEST_JSON);
 
+        // Create adapter and set it to the ListView
+        newsList.setAdapter(new NewsListAdapter(getApplicationContext(), newsArticleList));
+
     }
 }
