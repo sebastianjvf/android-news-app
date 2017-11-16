@@ -4,9 +4,14 @@ import android.app.LoaderManager;
 import android.content.AsyncTaskLoader;
 import android.content.Context;
 import android.content.Loader;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,19 +24,39 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     // Logging made cool
     public static String LOG_TAG = "NewsList";
 
-    private ArrayList<NewsArticle> newsArticleList = new ArrayList<NewsArticle>();
+    private ArrayList<NewsArticle> newsArticleData = new ArrayList<NewsArticle>();
 
-    NewsListAdapter adapter;
+    private NewsListAdapter adapter;
 
     private static final int EARTHQUAKE_LOADER_ID = 0;
+
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Start the loader with the callback functions in THIS class
-        getLoaderManager().initLoader(EARTHQUAKE_LOADER_ID, null, this).forceLoad();
+        // Show progress bar
+        progressBar = (ProgressBar) findViewById(R.id.loading);
+        progressBar.setVisibility(View.VISIBLE);
+
+        // Check internet connection
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+
+        TextView noConnection = ((TextView) findViewById(R.id.no_connection));
+
+        if (isConnected) {
+            // Start the loader with the callback functions in THIS class
+            getLoaderManager().initLoader(EARTHQUAKE_LOADER_ID, null, this).forceLoad();
+            noConnection.setVisibility(View.GONE);
+        } else {
+            // Hide the no connection TextView
+            noConnection.setText(R.string.not_connected_to_the_internet);
+            noConnection.setVisibility(View.VISIBLE);
+        }
     }
 
     // What happens when the loader is created?
@@ -43,17 +68,27 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     // What happens when the loader has finished loading?
     @Override
     public void onLoadFinished(Loader<List<NewsArticle>> loader, List<NewsArticle> data) {
+        // Hide the progress bar - loading is finished!
+        progressBar.setVisibility(View.GONE);
+
         // Find the listView
-        ListView newsList = (ListView) findViewById(R.id.list_view);
-        newsArticleList = (ArrayList<NewsArticle>) data;
+        ListView newsListView = (ListView) findViewById(R.id.list_view);
+        newsArticleData = (ArrayList<NewsArticle>) data;
 
         // Create adapter and set it to the ListView
-        adapter = new NewsListAdapter(getApplicationContext(), newsArticleList);
-        newsList.setAdapter(adapter);
+        adapter = new NewsListAdapter(getApplicationContext(), newsArticleData);
+        newsListView.setAdapter(adapter);
+
+        TextView noArticles = (TextView) findViewById(R.id.no_articles);
 
         // If news articles were loaded (= are not null/empty)
         if (data != null & !data.isEmpty()) {
-            adapter.addAll(newsArticleList);
+            adapter.addAll(newsArticleData);
+            noArticles.setVisibility(View.GONE);
+        } else {
+            // Show appropriate message: no articles available
+            noArticles.setText(R.string.no_articles_available);
+            noArticles.setVisibility(View.VISIBLE);
         }
     }
 
