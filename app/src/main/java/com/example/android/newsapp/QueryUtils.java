@@ -31,7 +31,8 @@ public class QueryUtils {
 
         try {
             // Parse the given JSON and retrieve the array of news articles.
-            JSONObject parsedJSON = (new JSONObject(makeHttpRequest(inputUrl))).optJSONObject("response");
+            String JSONString = makeHttpRequest(inputUrl);
+            JSONObject parsedJSON = new JSONObject(JSONString).optJSONObject("response");
 
             JSONArray newsArticleJSONArray = (JSONArray) parsedJSON.optJSONArray("results");
 
@@ -139,5 +140,4 @@ public class QueryUtils {
         }
         return output.toString();
     }
-
 }
