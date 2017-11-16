@@ -21,6 +21,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     private ArrayList<NewsArticle> newsArticleList = new ArrayList<NewsArticle>();
 
+    NewsListAdapter adapter;
+
     private static final int EARTHQUAKE_LOADER_ID = 0;
 
     @Override
@@ -46,11 +48,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         newsArticleList = (ArrayList<NewsArticle>) data;
 
         // Create adapter and set it to the ListView
-        NewsListAdapter adapter = new NewsListAdapter(getApplicationContext(), newsArticleList);
+        adapter = new NewsListAdapter(getApplicationContext(), newsArticleList);
         newsList.setAdapter(adapter);
 
         // If news articles were loaded (= are not null/empty)
-        if(data != null & !data.isEmpty()) {
+        if (data != null & !data.isEmpty()) {
             adapter.addAll(newsArticleList);
         }
     }
@@ -58,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     // What happens when the loader is reset?
     @Override
     public void onLoaderReset(Loader<List<NewsArticle>> loader) {
+        adapter.clear();
     }
 
     private static class EarthquakeTask extends AsyncTaskLoader<List<NewsArticle>> {
@@ -66,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         /**
          * Takes a string as input as the URL should stay modifiable.
+         *
          * @param context
          * @param url
          */
