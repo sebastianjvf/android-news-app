@@ -41,9 +41,10 @@ public class QueryUtils {
                 JSONObject currentItem = (JSONObject) newsArticleJSONArray.get(i);
                 String title = currentItem.getString("webTitle");
                 String date = currentItem.getString("webPublicationDate");
+                String author = ((JSONObject) currentItem.optJSONArray("tags").get(0)).getString("webTitle");
                 String url = currentItem.getString("webUrl");
 
-                NewsArticle currentNewsArticle = new NewsArticle(title, date, url);
+                NewsArticle currentNewsArticle = new NewsArticle(title, date, author, url);
                 newsArticles.add(currentNewsArticle);
             }
 
