@@ -50,7 +50,12 @@ public class NewsListAdapter extends ArrayAdapter<NewsArticle> {
         };
 
         title.setText(currentItem.getTitle());
-        author.setText(currentItem.getAuthor());
+
+        if(!currentItem.getAuthor().isEmpty()) {
+            author.setText(currentItem.getAuthor());
+        } else {
+            author.setVisibility(View.GONE);
+        }
 
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
