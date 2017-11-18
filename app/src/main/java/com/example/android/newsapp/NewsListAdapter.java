@@ -36,6 +36,7 @@ public class NewsListAdapter extends ArrayAdapter<NewsArticle> {
         // Extract the data from the current item and set the Text to the list item
         TextView title = convertView.findViewById(R.id.title);
         TextView date = convertView.findViewById(R.id.date);
+        TextView author = convertView.findViewById(R.id.author);
 
         // Parse to a readable format
         try {
@@ -49,6 +50,12 @@ public class NewsListAdapter extends ArrayAdapter<NewsArticle> {
         };
 
         title.setText(currentItem.getTitle());
+
+        if(!currentItem.getAuthor().isEmpty()) {
+            author.setText(currentItem.getAuthor());
+        } else {
+            author.setVisibility(View.GONE);
+        }
 
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
