@@ -91,9 +91,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     // What happens when the loader is created?
     @Override
     public Loader<List<NewsArticle>> onCreateLoader(int id, Bundle args) {
-        // Created shared preferences and load the value from the settings screen
+        // Created shared preferences and load the values from the settings screen
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         String minYear = sharedPreferences.getString(getString(R.string.settings_min_year_key), getString(R.string.settings_min_year_value));
+        String tag = sharedPreferences.getString(getString(R.string.settings_view_category_key), getString(R.string.settings_view_category_default));
 
         // Parse the base URL to a URI
         Uri baseUri = Uri.parse(REQUEST_URL);
@@ -104,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         // Append the parameters
         uriBuilder.appendQueryParameter("q", "debate");
         uriBuilder.appendQueryParameter("from-date", minYear + "-01-01");
-        uriBuilder.appendQueryParameter("tag", "politics/politics");
+        uriBuilder.appendQueryParameter("tag", tag);
         uriBuilder.appendQueryParameter("api-key", "test");
 
         // Load from the new URL

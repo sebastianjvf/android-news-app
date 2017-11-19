@@ -22,7 +22,9 @@ public class SettingsActivity extends AppCompatActivity {
             addPreferencesFromResource(R.xml.settings_main);
 
             Preference minYear = findPreference(getString(R.string.settings_min_year_key));
+            Preference category = findPreference(getString(R.string.settings_view_category_key));
             bindPreferenceSummaryToValue(minYear);
+            bindPreferenceSummaryToValue(category);
         }
 
         private void bindPreferenceSummaryToValue(Preference preference) {
@@ -31,7 +33,7 @@ public class SettingsActivity extends AppCompatActivity {
             String preferenceString = preferences.getString(preference.getKey(), "");
             onPreferenceChange(preference, preferenceString);
         }
-
+g
         @Override
         public boolean onPreferenceChange(Preference preference, Object newValue) {
             String stringValue = newValue.toString();

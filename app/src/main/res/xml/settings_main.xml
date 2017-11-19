@@ -10,7 +10,7 @@
         android:title="@string/settings_min_year_label" />
 
     <ListPreference
-        android:defaultValue="@string/settings_view_category"
+        android:defaultValue="@string/settings_view_category_default"
         android:entries="@array/settings_order_by_labels"
         android:entryValues="@array/settings_view_category"
         android:key="@string/settings_view_category_key"
