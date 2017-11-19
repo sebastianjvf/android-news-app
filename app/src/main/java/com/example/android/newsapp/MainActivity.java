@@ -5,9 +5,12 @@ import android.content.AsyncTaskLoader;
 import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,7 +25,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<NewsArticle>> {
 
     // The request url
-    private static String REQUEST_URL = "https://content.guardianapis.com/search?q=debate&tag=politics/politics&from-date=2014-01-01&api-key=test";
+    private static String REQUEST_URL = "https://content.guardianapis.com/search"; // ?q=debate&tag=politics/politics&from-date=2014-01-01&api-key=test"
 
     // Logging made cool
     public static String LOG_TAG = "NewsList";
@@ -88,7 +91,24 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     // What happens when the loader is created?
     @Override
     public Loader<List<NewsArticle>> onCreateLoader(int id, Bundle args) {
-        return new EarthquakeTask(this, REQUEST_URL);
+        // Created shared preferences and load the value from the settings screen
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String minYear = sharedPreferences.getString(getString(R.string.settings_min_year_key), getString(R.string.settings_min_year_value));
+
+        // Parse the base URL to a URI
+        Uri baseUri = Uri.parse(REQUEST_URL);
+
+        // Prepare for adding
+        Uri.Builder uriBuilder = baseUri.buildUpon();
+
+        // Append the parameters
+        uriBuilder.appendQueryParameter("q", "debate");
+        uriBuilder.appendQueryParameter("from-date", minYear + "-01-01");
+        uriBuilder.appendQueryParameter("tag", "politics/politics");
+        uriBuilder.appendQueryParameter("api-key", "test");
+
+        // Load from the new URL
+        return new EarthquakeTask(this, uriBuilder.toString());
     }
 
     // What happens when the loader has finished loading?

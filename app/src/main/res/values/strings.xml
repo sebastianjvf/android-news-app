@@ -3,4 +3,7 @@
     <string name="not_connected_to_the_internet">Not connected to the Internet.</string>
     <string name="no_articles_available">No articles available.</string>
     <string name="settings_title">Settings</string>
+    <string name="settings_min_year_value">2014</string>
+    <string name="settings_min_year_key">min_year</string>
+    <string name="settings_min_year_label">Minimum year</string>
 </resources>
