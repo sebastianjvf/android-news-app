@@ -6,4 +6,14 @@
     <string name="settings_min_year_value">2014</string>
     <string name="settings_min_year_key">min_year</string>
     <string name="settings_min_year_label">Minimum year</string>
+
+    <string name="settings_view_category_label">View category</string>
+    <string name="settings_view_category_key" translatable="false">view_category</string>
+    <string name="settings_view_category" translatable="false">@string/settings_view_category_technology_value</string>
+
+    <string name="settings_view_category_technology_label">Technology</string>
+    <string name="settings_view_category_technology_value" translatable="false">technology</string>
+
+    <string name="settings_view_category_politics_label">Politics</string>
+    <string name="settings_view_category_politics_value" translatable="false">politics</string>
 </resources>
