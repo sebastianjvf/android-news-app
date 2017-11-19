@@ -39,19 +39,24 @@ public class NewsListAdapter extends ArrayAdapter<NewsArticle> {
         TextView author = convertView.findViewById(R.id.author);
 
         // Parse to a readable format
-        try {
-            String dateToParse = currentItem.getDate().replace("T", " ").replace("Z", "");
-            Date dateParsed = (new SimpleDateFormat("yyyy-mm-dd HH:mm:ss")).parse(dateToParse);
-            String dateToDisplay = (new SimpleDateFormat("dd MMM yyyy, HH:mm:ss")).format(dateParsed);
-            date.setText(dateToDisplay);
-        } catch (ParseException e) {
-            e.printStackTrace();
-            Log.e("Bla", e.toString());
-        };
+        // Only, if date is available
+        if (!currentItem.getDate().isEmpty()) {
+            try {
+                String dateToParse = currentItem.getDate().replace("T", " ").replace("Z", "");
+                Date dateParsed = (new SimpleDateFormat("yyyy-mm-dd HH:mm:ss")).parse(dateToParse);
+                String dateToDisplay = (new SimpleDateFormat("dd MMM yyyy, HH:mm:ss")).format(dateParsed);
+                date.setText(dateToDisplay);
+            } catch (ParseException e) {
+                e.printStackTrace();
+                Log.e("Bla", e.toString());
+            }
+        } else {
+            author.setVisibility(View.GONE);
+        }
 
         title.setText(currentItem.getTitle());
 
-        if(!currentItem.getAuthor().isEmpty()) {
+        if (!currentItem.getAuthor().isEmpty()) {
             author.setText(currentItem.getAuthor());
         } else {
             author.setVisibility(View.GONE);
@@ -63,7 +68,7 @@ public class NewsListAdapter extends ArrayAdapter<NewsArticle> {
                 Intent intent = new Intent(Intent.ACTION_VIEW, (Uri.parse(currentItem.getUrl())));
 
                 // If a programme is able to process the intent, open it
-                if(intent.resolveActivity(getContext().getPackageManager()) != null) {
+                if (intent.resolveActivity(getContext().getPackageManager()) != null) {
                     getContext().startActivity(intent);
                 }
             }
